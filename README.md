@@ -1,4 +1,4 @@
-# Microfrontends - Small Packages, Large Webapps
+# Micro-frontends - Small Steps to Manageable large Webapps
  <!-- title: Microfrontends - Small Steps to a Modern UI -->
 ![Image: All fe Logos](banner.jpg "All fe Logos")
 
