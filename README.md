@@ -1,68 +1,88 @@
-# Microfrontends - Next Steps in Modern UIs
+# Microfrontends - Small Steps to a Modern UI
+ <!-- title: Microfrontends - Small Steps to a Modern UI -->
+![Image: All fe Logos](banner.jpg "All fe Logos")
 
-Micro-frontend is a design pattern that extends the concepts of micro services to the frontend world. This is done by decomposing the frontend into individual, semi-independent **microapps**. 
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+- [Microfrontends - Small Steps to a Modern UI](#microfrontends---small-steps-to-a-modern-ui)
+  - [Why use a Microfrontend Setup](#why-use-a-microfrontend-setup)
+  - [implementation](#implementation)
+- [Code it!](#code-it)
+- [Micro Commands for Micro Apps](#micro-commands-for-micro-apps)
+  - [React CLI](#react-cli)
+  - [Build, Deploy and Run](#build-deploy-and-run)
+- [Conclusion](#conclusion)
+  - [References](#references)
+  - [Github](#github)
+
+Micro-frontend is a design pattern that extends the concepts of microservices to the frontend domain. 
+
+This is done by decomposing the frontend into individual, semi-independent **microapps**. 
 
 ## Why use a Microfrontend Setup
 
-1. Technology Agnostic - Able to choose and upgrade stacks without coordinating with other teams. 
-2. Decoupled Teams - Wither their isolated code and self-contained apps working on the same app.
-3. Native Browser Features - using Browser Events for communication instead of building a global PubSub system. 
-4. Resiliance and Consitency - Through a progressive app.
+1. **Technology Agnostic** - Develope and deploy any stacks. 
+2. **Decoupled Teams** - Isolated code and self-contained apps working on the same main app, but different teams.
+3. **Native Browser Features** - using Browser Events for communication. 
+4. **Resiliance and Consitency** - Through a progressive app, or by apps not affecting each other.
+
+![Image: Architecture diagram from rethink](microarchitecture.jpeg "Architecture diagram from rethink")
 
 ## implementation
 
-All done through these splitting variants:
-- Built-time split: micro apps are seperate npm pacakages, integrated into a parent component. Note that the parent needs to be rebuilt on every microapp change.
-- Run-time split: Done through routing, and having the microapps as individual nodes loaded through javascript.
+Micro-frontends are implemented by splitting your UIs, using one of these two methods:
+- **Built-time split**: micro apps are seperate npm pacakages, integrated into a parent component. Note that the parent needs to be rebuilt on every microapp change.
+- **Run-time split**: Done through routing, and having the microapps as individual nodes loaded through javascript.
 
-If you are an SRE kind of engineer, you see the potential of A/B testing and red/black deployments.
+If you are an SRE kind of engineer, you see the potential of A/B testing and red/black deployments in the above.
 
 # Code it!
 
-We will use a known framework called **single-spa** and build a runtime spit micro-frontend.
+We will use a known framework called **[single-spa](https://single-spa.js.org/)** and build a *runtime spit* micro-frontend.
 
-Create a root 'macro-app':
+First, create a root 'macro-app':
 
 `npx create-single-spa --moduleType root-config --framework react --dir root`
 
-Create a micro-app:
+Then create a micro-app:
 
 `npx create-single-spa --moduleType app-parcel  --framework react --dir micro`
 
-Look at the package.json of the micro app, at the name - we will register this in our root app.
+Look **name** attribute of  the package.json from the micro app name - we will register with this in our root app.
 
-in the *index.ejs*, import our micro app:
+Go to the root app, in the *index.ejs* import our micro app:
 
 ```jsx
 <script type="systemjs-importmap">
   {
     "imports": {
-      "@single-spa/welcome": "https://unpkg.com/single-spa-welcome/dist/single-spa-welcome.js",
-      "@radmada/root-config": "//localhost:9000/radmada-root-config.js",
-      "react": "https://cdn.jsdelivr.net/npm/react@16.13.1/umd/react.production.min.js",
-      "react-dom": "https://cdn.jsdelivr.net/npm/react-dom@16.13.1/umd/react-dom.production.min.js",
+      ...
       "@radmada/radmada": "http://localhost:8080/radmada-radmada.js"
     }
   }
 </script>
 ```
 
-in the *microfrontend-layout.html*, register our micro app:
+Still in the root app, go to the *microfrontend-layout.html* and register the micro app:
 ```jsx
 <main>
   <route default>
+    ...
     <application name="@radmada/radmada"></application>
   </route>
 </main>
 ```
 
-In the root, run:
+Finally, execute the root container by running:
 
 `yarn start`
 
-And there, we running microapps on a micro-frontend framework. We can register more micro-frontends to this root app.
+And there, we are running microapps on a micro-frontend framework. We can keep registering more micro-frontends to this root app with the above steps.
 
-## Start with React
+Note we are using parcels here, parcels render their own HTML and are not bound to any route. Although simple, the preferred way is to use routes with a build-time micro-frontend.
+
+# Micro Commands for Micro Apps
+
+## React CLI
 
 We bootstrapped this project with [Create React App](https://github.com/facebook/create-react-app), or to summarise:
 
@@ -78,9 +98,24 @@ We bootstrapped this project with [Create React App](https://github.com/facebook
 - `npm test`- Launches a test runner, see [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 - `npm run build` - Builds the app for production to the `build` folder. See [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-## Further Documentation
 
+# Conclusion
+
+In brief, micro-frontends are series of **mini-apps** as independent modules designed in various frameworks, stored in different code repositories. Which we run in the same webcontainer, sharing code, style and even communicating with each other.
+
+Wait for nano-frontends in five years time!
+
+## References
+
+- https://single-spa.js.org/
 - Code Splitting: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-- Analyzing the Bundle Size: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 - Making a Progressive Web App: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-- Advanced Configuration: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+
+## Github
+
+Article here is also available on [Github](https://github.com/adamd1985/articles/tree/main/k8s_firststeps)
+
+#
+
+<div align="right">Made with :heartpulse: by <b>Adam</b></div>
