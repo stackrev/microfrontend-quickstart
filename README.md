@@ -114,7 +114,7 @@ Wait for nano-frontends in five years time!
 
 ## Github
 
-Article here is also available on [Github](https://github.com/adamd1985/articles/tree/main/k8s_firststeps)
+Article here is also available on [Github](https://github.com/adamd1985/microfrontend-quickstart)
 
 #
 
